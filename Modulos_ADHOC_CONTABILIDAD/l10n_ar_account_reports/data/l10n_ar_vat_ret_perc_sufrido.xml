@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="l10n_ar_iva_report" model="account.report">
+        <field name="name">IVA</field>
+        <field name="root_report_id" ref="account.generic_tax_report"/>
+        <field name="sequence">20</field>
+        <field name="country_id" ref="base.ar"/>
+        <field name="filter_hierarchy">never</field>
+        <field name="filter_unreconciled" eval="False"/>
+        <field name="filter_period_comparison" eval="False"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="custom_handler_model_id" ref="model_l10n_ar_iva_report_handler"/>
+        <field name="column_ids">
+            <record id="l10n_ar_iva_report_column_total" model="account.report.column">
+                <field name="name">Balance</field>
+                <field name="name@es_419">Balance</field>
+                <field name="expression_label">balance</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <record id="l10n_ar_iva_report_debito_fiscal" model="account.report.line">
+                <field name="name">(+) Débito Fiscal (Ventas)</field>
+                <field name="code">L10N_AR_IVA_DEBITO</field>
+                <field name="expression_ids">
+                    <record id="l10n_ar_iva_report_debito_fiscal_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">domain</field>
+                        <field name="formula">[("tax_line_id.type_tax_use", "=", "sale"), ("tax_line_id.tax_group_id.l10n_ar_vat_afip_code", "!=", False)]</field>
+                        <field name="subformula">-sum</field>
+                    </record>
+                </field>
+            </record>
+            <record id="l10n_ar_iva_report_credito_fiscal" model="account.report.line">
+                <field name="name">(-) Crédito Fiscal (Compras)</field>
+                <field name="code">L10N_AR_IVA_CREDITO</field>
+                <field name="expression_ids">
+                    <record id="l10n_ar_iva_report_credito_fiscal_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">domain</field>
+                        <field name="formula">[("tax_line_id.type_tax_use", "=", "purchase"), ("tax_line_id.tax_group_id.l10n_ar_vat_afip_code", "!=", False)]</field>
+                        <field name="subformula">-sum</field>
+                    </record>
+                </field>
+            </record>
+            <record id="l10n_ar_iva_report_saldo_tecnico" model="account.report.line">
+                <field name="name">(=) Saldo Técnico (1er Párrafo)</field>
+                <field name="code">L10N_AR_IVA_SALDO_TECNICO</field>
+                <field name="expression_ids">
+                    <record id="l10n_ar_iva_report_saldo_tecnico_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">aggregation</field>
+                        <field name="formula">L10N_AR_IVA_DEBITO.balance + L10N_AR_IVA_CREDITO.balance</field>
+                    </record>
+                </field>
+            </record>
+            <record id="l10n_ar_iva_report_iva_withholdings_line" model="account.report.line">
+                <field name="name">(-) Retenciones Sufridas</field>
+                <field name="code">L10N_AR_IVA_RETENCIONES</field>
+                <field name="expression_ids">
+                    <record id="l10n_ar_iva_report_iva_withholdings_line_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">domain</field>
+                        <field name="formula">[("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer"), ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06")]</field>
+                        <field name="subformula">-sum</field>
+                    </record>
+                </field>
+            </record>
+            <record id="l10n_ar_iva_report_iva_perceptions_line" model="account.report.line">
+                <field name="name">(-) Percepciones Sufridas</field>
+                <field name="code">L10N_AR_IVA_PERCEPCIONES</field>
+                <field name="expression_ids">
+                    <record id="l10n_ar_iva_report_iva_perceptions_line_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">domain</field>
+                        <field name="formula">[("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.type_tax_use", "=", "purchase"), ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06")]</field>
+                        <field name="subformula">-sum</field>
+                    </record>
+                </field>
+            </record>
+        </field>
+    </record>
+
+    <record id="l10n_ar_reports.ar_tax_return_type" model="account.return.type">
+        <field name="name">IVA</field>
+        <field name="payment_partner_id" ref="l10n_ar.partner_afip"/>
+        <field name="default_deadline_days_delay">15</field>
+        <field name="report_id" ref="l10n_ar_iva_report"/>
+    </record>
+</odoo>

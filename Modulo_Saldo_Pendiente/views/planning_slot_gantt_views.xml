@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        El popover del Gantt de Planificación NO es un form view: es un
+        componente OWL (PlanningGanttRenderer) que arma su contenido en
+        JS. Un <field> visible en este arch NO aparece solo por estar
+        visible; solo queda disponible en pill.record para que el JS lo
+        lea (igual que ya hace este módulo con sale_order_id/sale_line_id
+        más abajo). El badge de color se agrega en
+        static/src/views/planning_gantt/planning_gantt_popover_patch.js.
+
+        Se hereda de la vista de 'sale_planning' para asegurar que corre
+        después de que sale_planning ya declaró sale_order_id/sale_line_id.
+    -->
+    <record id="planning_slot_view_gantt_inherit_saldo_pendiente" model="ir.ui.view">
+        <field name="name">planning.slot.gantt.inherit.saldo.pendiente</field>
+        <field name="model">planning.slot</field>
+        <field name="inherit_id" ref="sale_planning.planning_slot_view_gantt_inherit_sale_planning"/>
+        <field name="mode">extension</field>
+        <field name="arch" type="xml">
+            <gantt position="inside">
+                <field name="x_estado_pago" invisible="1"/>
+                <field name="x_saldo_pendiente" invisible="1"/>
+            </gantt>
+        </field>
+    </record>
+
+</odoo>

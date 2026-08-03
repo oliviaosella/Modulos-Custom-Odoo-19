@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_svt_limpieza_datos" model="ir.ui.view">
+        <field name="name">Limpieza de Datos</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <form string="Limpieza de Datos" class="oe_form_configuration svt_cleanup_form">
+                <div class="mt16 svt_cleanup_container" name="data-clean">
+                    <span>
+                        <h2>Limpieza de datos (¡tené cuidado con esto!)</h2>
+                        <h2>
+                            Los datos se eliminan directamente de las tablas de la base con consultas SQL.
+                            Una vez ejecutado, no se puede revertir. Se preserva la configuración
+                            (incluido el plan de cuentas, diarios e impuestos).
+                        </h2>
+                    </span>
+                    <div class="svt_row">
+                        <span class="svt_area_label">Todo</span>
+                        <button string="Eliminar todas las transacciones (preserva configuración)"
+                                type="object" name="action_remove_all"
+                                confirm="¿Confirmás eliminar todas las transacciones? Esta acción no se puede deshacer. La configuración y el plan de cuentas se preservan."
+                                class="btn svt_btn_remove_all"/>
+                    </div>
+                    <div class="svt_row">
+                        <span class="svt_area_label">Ventas</span>
+                        <button string="Eliminar todas las órdenes de venta" type="object" name="action_remove_sales"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                    </div>
+                    <div class="svt_row">
+                        <span class="svt_area_label">Punto de Venta</span>
+                        <button string="Eliminar todas las órdenes de POS" type="object" name="action_remove_pos"
+                                confirm="¿Confirmás eliminar los datos seleccionados?"
+                                class="btn svt_btn_secondary"/>
+                    </div>
+                    <div class="svt_row">
+                        <span class="svt_area_label">Compras</span>
+                        <button string="Eliminar todas las órdenes de compra y solicitudes" type="object" name="action_remove_purchase"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                    </div>
+                    <div class="svt_row">
+                        <span class="svt_area_label">Gastos</span>
+                        <button string="Eliminar todos los gastos y hojas de gastos" type="object" name="action_remove_expense"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                    </div>
+                    <div class="svt_row">
+                        <span class="svt_area_label">Fabricación</span>
+                        <button string="Eliminar todas las órdenes de fabricación" type="object" name="action_remove_mrp"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                        <button string="Eliminar todas las listas de materiales (LdM)" type="object" name="action_remove_mrp_bom"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                    </div>
+                    <div class="svt_row">
+                        <span class="svt_area_label">Inventario</span>
+                        <button string="Eliminar movimientos/entregas/paquetes/lotes" type="object" name="action_remove_inventory"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                    </div>
+                    <div class="svt_row">
+                        <span class="svt_area_label">
+                            Contabilidad
+                            <span title="Los valores definidos acá son específicos por compañía." groups="base.group_multi_company"/>
+                        </span>
+                        <button string="Eliminar comprobantes/facturas de cliente/facturas de proveedor" type="object" name="action_remove_account"
+                                confirm="¿Confirmás eliminar los datos seleccionados? El plan de cuentas, diarios, impuestos y cuentas/planes analíticos se preservan." class="btn svt_btn_secondary"/>
+                    </div>
+                    <div class="svt_row">
+                        <span class="svt_area_label">Proyecto</span>
+                        <button string="Eliminar proyectos/tareas/previsiones" type="object" name="action_remove_project"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                    </div>
+                    <div class="svt_row">
+                        <span class="svt_area_label">Calidad</span>
+                        <button string="Eliminar controles de calidad" type="object" name="action_remove_quality"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                        <button string="Eliminar configuración de calidad" type="object" name="action_remove_quality_setting"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                    </div>
+                    <div class="svt_row">
+                        <span class="svt_area_label">Sitio web y blog</span>
+                        <button string="Eliminar sitio web/blog" type="object" name="action_remove_website"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                    </div>
+                    <div class="svt_row">
+                        <span class="svt_area_label">Modelos base</span>
+                        <button string="Eliminar productos" type="object" name="action_remove_product"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                        <button string="Eliminar atributos de producto" type="object" name="action_remove_product_attribute"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                        <button string="Eliminar mensajes" type="object" name="action_remove_message"
+                                confirm="¿Confirmás eliminar los datos seleccionados?" class="btn svt_btn_secondary"/>
+                        <button string="Recalcular nombre completo de categorías y ubicaciones" type="object"
+                                name="reset_cat_loc_name" class="btn svt_btn_secondary"/>
+                    </div>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_svt_limpieza_datos" model="ir.actions.act_window">
+        <field name="name">Limpieza de Datos</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_svt_limpieza_datos"/>
+    </record>
+
+    <menuitem
+            id="menu_svt_limpieza_datos"
+            name="Limpieza de Datos"
+            action="action_svt_limpieza_datos"
+            parent="base.menu_administration"
+            sequence="1"
+            groups="base.group_system"/>
+
+</odoo>

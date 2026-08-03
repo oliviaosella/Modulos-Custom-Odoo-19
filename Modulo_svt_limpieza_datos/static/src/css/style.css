@@ -1,0 +1,69 @@
+/* Clases propias y únicas de este módulo (svt_*). No dependen de ningún scope
+   externo ni pelean contra clases nativas de Odoo (oe_highlight / btn-primary),
+   por eso tienen control total del estilo. */
+
+/* --- Contenedor: layout propio (se reemplaza el o_settings_container -- */
+/* nativo, que es flex-wrap y hacía que las filas se acomodaran una al lado
+   de la otra). Como bloque, cada fila cae en su propio renglón. */
+.svt_cleanup_container {
+    display: block;
+    max-width: 900px;
+}
+
+/* --- Filas: cada área en su renglón, label + botones alineados -------- */
+.svt_row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    margin-bottom: 14px;
+}
+
+/* --- Etiqueta de área: columna fija y alineada ------------------------ */
+/* flex-basis fijo => todas las etiquetas quedan alineadas en una misma
+   columna vertical sin importar el largo del texto. */
+.svt_area_label {
+    flex: 0 0 150px;
+    font-weight: 600;
+    color: var(--text-primary, #111827);
+}
+
+/* --- Botones secundarios (azul institucional SaviaTech) --------------- */
+.btn.svt_btn_secondary,
+.btn.svt_btn_secondary:focus {
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 4px;
+    background-color: #1565c0;
+    border-color: #1565c0;
+    color: #ffffff;
+    text-transform: none;
+}
+.btn.svt_btn_secondary:hover,
+.btn.svt_btn_secondary:active {
+    background-color: #0d47a1;
+    border-color: #0d47a1;
+    color: #ffffff;
+}
+
+/* --- Botón principal (verde bosque sobrio) ---------------------------- */
+/* Se distingue por el color, no por el tamaño: apenas más grande que los
+   secundarios para mantener la jerarquía sin resultar desproporcionado. */
+.btn.svt_btn_remove_all,
+.btn.svt_btn_remove_all:focus {
+    font-size: 0.92rem;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 4px;
+    background-color: #0b6e4f;
+    border-color: #0b6e4f;
+    color: #ffffff;
+    text-transform: none;
+}
+.btn.svt_btn_remove_all:hover,
+.btn.svt_btn_remove_all:active {
+    background-color: #095c42;
+    border-color: #095c42;
+    color: #ffffff;
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        La vista Gantt base (planning.planning_view_gantt) no declara
+        sale_order_id ni sale_line_id como <field> en su arch, por lo que
+        esos valores nunca llegan al JS (record.sale_order_id es undefined).
+
+        Esta vista los agrega como campos invisibles para que estén
+        disponibles en el `record` que recibe getPopoverProps() en
+        planning_gantt_popover_patch.js.
+
+        Se hereda de la vista de sale_planning (que es la heredera directa
+        de la vista base) para asegurar que esta corre después de que
+        sale_planning ya hizo sus cambios de default_group_by.
+    -->
+    <record id="planning_slot_view_gantt_inherit_open_order" model="ir.ui.view">
+        <field name="name">planning.slot.gantt.inherit.open.order</field>
+        <field name="model">planning.slot</field>
+        <field name="inherit_id" ref="sale_planning.planning_slot_view_gantt_inherit_sale_planning"/>
+        <field name="mode">extension</field>
+        <field name="arch" type="xml">
+            <gantt position="inside">
+                <field name="sale_order_id" invisible="1"/>
+                <field name="sale_line_id" invisible="1"/>
+            </gantt>
+        </field>
+    </record>
+
+</odoo>

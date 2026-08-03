@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        El popover del Gantt de Planificación arma su cuerpo a partir de
+        la vista kanban indicada en kanban_view_id de planning_view_gantt
+        (ver planning/views/planning_views.xml), que es esta vista:
+        planning.planning_view_kanban_inherit.
+
+        Ahí, en el footer, ya se muestra el badge de estado ("Publicado")
+        con:
+            <field name="state" widget="label_selection" .../>
+        Agregamos nuestro campo justo al lado, mismo tamaño, misma línea.
+    -->
+    <record id="planning_slot_view_kanban_inherit_saldo_pendiente" model="ir.ui.view">
+        <field name="name">planning.slot.kanban.inherit.saldo.pendiente</field>
+        <field name="model">planning.slot</field>
+        <field name="inherit_id" ref="planning.planning_view_kanban_inherit"/>
+        <field name="mode">extension</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="x_estado_pago" widget="badge"
+                       decoration-success="x_estado_pago == 'pagado'"
+                       decoration-warning="x_estado_pago == 'parcial'"
+                       decoration-danger="x_estado_pago == 'no_pagado'"
+                       class="me-1"/>
+                <field name="x_saldo_pendiente"
+                       invisible="x_estado_pago == 'pagado'"
+                       class="me-1 small"/>
+            </xpath>
+
+            <!-- Ocultar el badge "Publicado"/"Borrador" (pidieron sacarlo, molesta) -->
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!--
+                Ocultar el ícono de "herramienta" (el toggle del menú
+                Editar/Eliminar, definido en el t-name="menu" de la vista
+                base planning.planning_view_kanban). Se saca el template
+                completo: si no hay template "menu", el kanban record no
+                dibuja el ícono de engranaje/llave.
+            -->
+            <xpath expr="//t[@t-name='menu']" position="replace"/>
+        </field>
+    </record>
+
+</odoo>

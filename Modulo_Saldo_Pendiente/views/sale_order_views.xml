@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_form_inherit_saldo_pendiente" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.saldo.pendiente</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <!--
+                    Se ancla al <group> que ya contiene 'payment_term_id'
+                    (columna derecha del header: Fecha/Lista de precios/
+                    Términos de pago/Periodo de alquiler/Duración) y se
+                    agrega al final de ese mismo group, para que quede
+                    como una fila chica más, debajo de Duración, en vez
+                    de un banner grande que empuja el resto del formulario.
+                -->
+                <xpath expr="//field[@name='payment_term_id']/ancestor::group[1]" position="inside">
+                    <field name="x_estado_pago" widget="badge"
+                           decoration-success="x_estado_pago == 'pagado'"
+                           decoration-warning="x_estado_pago == 'parcial'"
+                           decoration-danger="x_estado_pago == 'no_pagado'"
+                           string="Estado de pago"/>
+                    <field name="x_saldo_pendiente"
+                           string="Saldo pendiente"
+                           invisible="x_estado_pago == 'pagado'"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
